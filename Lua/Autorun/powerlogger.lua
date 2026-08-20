@@ -1,9 +1,10 @@
 if CLIENT then
 
     local ticks = 0
+    local roundhasstarted = false
 
     Hook.Add("think", "PowerLogger", function ()
-        if Character.Controlled == nil then return end
+        if roundhasstarted == false then return end
         ticks = ticks + 1
         if ticks < 20 then
             return
@@ -83,5 +84,14 @@ if CLIENT then
                     tostring(math.floor(averagepoweroutput * 100 + 0.5) / 100) .. "\n")
             end
         end
+    end)
+
+    Hook.Add("roundStart", "start stuff", function ()
+        roundhasstarted = true
+    end)
+
+    Hook.Add("roundEnd", "reset stuff", function ()
+        roundhasstarted = false
+        ticks = 0
     end)
 end
